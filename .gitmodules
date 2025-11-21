@@ -1,0 +1,27 @@
+[submodule "adaptive_compliance_policy"]
+	path = adaptive_compliance_policy
+	url = https://github.com/mikelasa/adaptive_compliance_policy.git
+[submodule "hardware_interfaces"]
+	path = hardware_interfaces
+	url = https://github.com/mikelasa/hardware_interfaces.git
+[submodule "force_control_impedance"]
+	path = force_control_impedance
+	url = https://github.com/mikelasa/force_control_impedance.git
+[submodule "yaml-cpp"]
+	path = yaml-cpp
+	url = git@github.com:jbeder/yaml-cpp.git
+[submodule "cpplibrary"]
+	path = cpplibrary
+	url = git@github.com:yifan-hou/cpplibrary.git
+[submodule "libfranka"]
+	path = libfranka
+	url = https://github.com/frankaemika/libfranka.git
+[submodule "librealsense"]
+	path = librealsense
+	url = https://github.com/IntelRealSense/librealsense.git
+[submodule "opencv"]
+	path = opencv
+	url = https://github.com/opencv/opencv.git
+[submodule "ur_rtde"]
+	path = ur_rtde
+	url = https://gitlab.com/sdurobotics/ur_rtde.git

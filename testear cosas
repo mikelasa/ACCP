@@ -1,0 +1,8 @@
+desde root: activate mamba pyrite
+cd hardware_interfaces/build
+
+compilar cambios con make -j
+
+ejecutar script (por ejemplo test)
+
+./hardware/franka/test_franka 

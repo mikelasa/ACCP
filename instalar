@@ -1,0 +1,171 @@
+ACP
+    mkdir -p ACP    
+    git clone --recursive git@github.com:yifan-hou/adaptive_compliance_policy.git
+    cd adaptive_compliance_policy
+    EDITAR EL conda_environment.yaml (para un RTX 5080):
+        - borrar pytorch, torchvision, torchaudio, pytorch-cuda
+        - cambiar zarr y numcodecs por versiones inferiores: zarr<3, numcodecs<0.13
+
+    mamba env create -f conda_environment.yaml
+    # after finish, activate it using
+    mamba activate pyrite
+    # a few pip installs (cuda needs at least 12.8 for a 5080 and pytorch 2.7.0)
+    pip install --upgrade --index-url https://download.pytorch.org/whl/cu128 torch torchvision torchaudio
+    pip install v4l2py
+    pip install toppra
+    pip install atomics
+    pip  install vit-pytorch # Need at least 1.7.12, which was not available in conda
+    pip install imagecodecs # Need at least 2023.9.18, which caused lots of conflicts in conda
+
+
+    touch ${CONDA_PREFIX}/etc/conda/activate.d/linker.sh
+    nano ${CONDA_PREFIX}/etc/conda/activate.d/linker.sh # -copiar:
+        # clib_path_activate.sh
+        export LD_LIBRARY_PATH=/home/yifanhou/miniforge3/envs/pyrite/lib/:$LD_LIBRARY_PATH
+
+------------- PROYECTOS------------------
+cd 
+cd .local
+mkdir bin include lib
+sudo gedit ~/.bashrc # copiar:
+        # For home installations
+        export PATH=$HOME/.local/bin:$PATH
+        export C_INCLUDE_PATH=$HOME/.local/include/:$C_INCLUDE_PATH
+        export CPLUS_INCLUDE_PATH=$HOME/.local/include/:$CPLUS_INCLUDE_PATH
+        export LD_LIBRARY_PATH=$HOME/.local/lib/:$LD_LIBRARY_PATH
+
+
+YAMLCPP:
+    cd ../..
+    git clone git@github.com:jbeder/yaml-cpp.git
+    cd yaml-cpp
+    mkdir build && cd build
+    cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_INSTALL_PREFIX=$HOME/.local ..  # need to build with c++ 17
+    make -j
+    sudo make install
+
+EIGEN:
+    cd ../..
+    git clone git@github.com:jbeder/yaml-cpp.git
+    cd eigen-3.4.0/
+    mkdir build && cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local ..
+    make -j
+    sudo make install
+
+CPPLIBRARY:
+    cd ../..
+    git clone git@github.com:yifan-hou/cpplibrary.git
+    cd cpplibrary
+    mkdir build && cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local -DCMAKE_CXX_FLAGS="-I$HOME/.local/include"
+    make -j
+    sudo make install
+
+UR_RTDE:
+    cd ../..
+    git clone https://gitlab.com/sdurobotics/ur_rtde.git
+    cd ur_rtde
+    mkdir build && cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    make -j
+    sudo make install
+
+FORCE_CONTROL_IMPEDANCE:
+    cd ../..
+    git clone https://github.com/yifan-hou/force_control.git
+    cd force_control_impedance
+    mkdir build && cd build
+    abrir cmakelist.txt y añadir:
+        target_include_directories(FORCE_CONTROLLERS
+        PRIVATE
+            ${CMAKE_SOURCE_DIR}/../cpplibrary/include
+            ${CMAKE_SOURCE_DIR}/../yaml-cpp/include
+        )
+    cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local          -DCMAKE_POLICY_VERSION_MINIMUM=3.5          -DCMAKE_BUILD_TYPE=Release          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    make -j
+    sudo make install
+    
+OPENCV
+    cd ../..
+    sudo apt update && sudo apt install -y cmake g++ wget unzip
+    git clone https://github.com/opencv/opencv.git
+    git -C opencv checkout 4.12
+    cd opencv
+    mkdir build && cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local \
+         -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+         -DCMAKE_BUILD_TYPE=Release \
+         -DBUILD_EXAMPLES=OFF \
+         -DBUILD_TESTS=OFF \
+         -DBUILD_PERF_TESTS=OFF \
+         -DWITH_PNG=OFF \
+         -DBUILD_PNG=OFF
+    make -j$(($(nproc)-1))
+    sudo make install
+
+    (es posible que opencv de problemas a la hora de linkear las librerias, en ese caso actualizar intelisense para que reconozca)
+
+REALSENSE:
+    cd ../..
+    sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
+    sudo apt-get install libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev
+    sudo apt-get install git wget cmake build-essential
+    sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at
+    sudo apt install v4l-utils
+    git clone https://github.com/IntelRealSense/librealsense.git
+    cd librealsense
+    ./scripts/setup_udev_rules.sh
+    ./scripts/patch-realsense-ubuntu-lts-hwe.sh (only Ubuntu 20/22/24 (focal/jammy/noble) with LTS kernel 5.15, 5.19, 6.5 )
+    mkdir build && cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_EXAMPLES=true .. 
+    sudo make -j$(($(nproc)-1)) install
+
+LIBFRANKA
+    cd ../..
+    sudo apt-get update
+    sudo apt install -y build-essential cmake git libpoco-dev libeigen3-dev
+    git clone --branch 0.9.2 --recursive https://github.com/frankaemika/libfranka libfranka-0.9.2
+    cd libfranka-0.9.2/
+    mkdir build && cd build
+    cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_EXAMPLES=ON
+    make -j$(($(nproc)-1))
+    sudo make install
+
+    
+HARDWARE_INTERFACE_
+    cd ../..
+    git clone git@github.com:yifan-hou/hardware_interfaces.git (si vas a meter algo nuevo, fork primero)
+    cd hardware_interfaces
+    git checkout v1.0
+    mkdir build && cd build
+    sudo gedit hardware_interfaces/workcell/table_top_manip/src/manip_server_loops.cc # cambiar en linea 43 y 301 
+        RUT::InterpolationController por RUT::TaskSpaceInterpolationController
+    
+    en /home/TU USUARIO/ACP/hardware_interfaces/hardware/franka/CMakeLists.txt cambiar: 
+    include_directories(
+        include/
+        (TU PATH)/ACP/libfranka-0.9.2/src/
+        (TU PATH)/ACP/libfranka-0.9.2/include/franka/
+        (TU PATH)/ACP/libfranka-0.9.2/common/include/
+        /usr/include/eigen3
+        )
+
+    en /home/TU USUARIO/ACP/hardware_interfaces/applications/force_control_demo/CMakeLists.txt:
+
+        include_directories(
+            include/
+            yaml-cpp
+            ${EIGEN3_INCLUDE_DIRS}
+            (TU PATH)/ACP/libfranka-0.9.2/src/
+            (TU PATH)/ACP/libfranka-0.9.2/include/franka/
+            (TU PATH)/ACP/libfranka-0.9.2/common/include/
+            )
+
+    cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local \
+         -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+         -DCMAKE_BUILD_TYPE=Debug \
+         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    make -j
+    sudo make install
+

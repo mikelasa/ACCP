@@ -1,0 +1,33 @@
+dentro de mamba
+
+cd ~/ACP/libfranka-0.9.2/build/examples/
+./"script_name"  172.17.6.164
+
+# si se cambia el script o crea uno, volver a compilar
+# el script modificado/creado colocarlo en cd ~/ACP/libfranka-0.9.2/examples/
+#incluir script en el cmakelist de examples dentro de la lista:
+
+set(EXAMPLES
+  cartesian_impedance_control
+  communication_test
+  echo_robot_state
+  force_control
+  generate_cartesian_pose_motion
+  generate_cartesian_velocity_motion
+  generate_consecutive_motions
+  generate_elbow_motion
+  generate_joint_position_motion
+  generate_joint_velocity_motion
+  grasp_object
+  joint_impedance_control
+  joint_point_to_point_motion
+  motion_with_control
+  print_joint_poses
+  vacuum_object
+  get_joint_poses_once # ejemplo nuevo!
+)
+
+
+cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_EXAMPLES=ON
+make -j$(($(nproc)-1))
+sudo make install

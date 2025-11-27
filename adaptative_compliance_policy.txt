@@ -1,0 +1,36 @@
+INSTALACION:
+PROCESADO ZARR
+    mamba activate pyrite
+    cambiar en bashrc los directorios de output input antes de lanzar script
+    pip install imageio
+    pip uninstall zarr (si es version 3 o mas. mamba list para ver)
+    pip install imageio[ffmpeg]
+
+PARA AÑADIR LABELS:
+
+    pip install cvxpy
+
+-------------------------------------------------------------------------------------------
+
+POSTPROCESADO DATOS:
+PyriteUtility/data_pipeline/real_data_processing.py: PROCESADO DE DATOS REALES A ZARR
+PyriteEnvSuites/scripts/postprocess_add_virtual_target_label.py: CALCULA EL VIRTUAL TARGET Y LOS LABELS DE STIFFNESS
+
+CONFIGURACION ACCELERATE:
+accelerate config
+
+
+ENTRENO:
+PyriteML/diffusion_policy/policy/diffusion_unet_timm_mod1_policy.py: IMPLEMENTACION POLICY
+
+con FFT
+    HYDRA_FULL_ERROR=1 accelerate launch train.py --config-name=train_spec_workspace
+sin FFT
+    HYDRA_FULL_ERROR=1 accelerate launch train.py --config-name=train_conv_workspace
+multi GPU
+    HYDRA_FULL_ERROR=1 accelerate launch --gpu_ids 0,1,2,3 --num_processes=4 train.py --config-name=train_spec_workspace
+
+EVALUACION:
+ especificar el checkpoint folder antes de lanzar!!
+ PyriteEnvSuites/env_runners/virtual_target_real_env_runner.py: EJECUCION
+ virtual_target_real_env_runner.py: RECONSTRUYE LA MATRIZ K A PARTIR DE LOS OUTPUTS DEL POLICY

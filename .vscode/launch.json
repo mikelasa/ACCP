@@ -1,0 +1,150 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug rs-sensor-control",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/librealsense/build/Debug/rs-sensor-control",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/librealsense/build/Debug",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/librealsense/build/Debug:${workspaceFolder}/librealsense/build:${env:LD_LIBRARY_PATH}"
+                }
+            ],
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Debug test_realsense",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/hardware_interfaces/build/hardware/realsense/TESTREAL",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/hardware_interfaces/build",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/hardware_interfaces/build/hardware/realsense:${workspaceFolder}/librealsense/build:${env:LD_LIBRARY_PATH}"
+                }
+            ],
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Debug manipulation_server",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/hardware_interfaces/build/applications/manipulation_data_collection/manipulation_data_collection",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/hardware_interfaces/build",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/home/robotlab/micromamba/envs/pyrite/lib:${workspaceFolder}/hardware_interfaces/build/hardware/realsense:${workspaceFolder}/librealsense/build:${env:LD_LIBRARY_PATH}"
+                }
+            ],
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Debug test_franka",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/hardware_interfaces/build/hardware/franka/test_franka",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/hardware_interfaces/build",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/home/robotlab/micromamba/envs/pyrite/lib:${workspaceFolder}/hardware_interfaces/build/hardware/realsense:${workspaceFolder}/librealsense/build:${env:LD_LIBRARY_PATH}"
+                }
+            ],
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Debug demo_with_franka",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/hardware_interfaces/build/applications/force_control_demo/demo_with_franka",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/hardware_interfaces/build",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/home/robotlab/micromamba/envs/pyrite/lib:${workspaceFolder}/hardware_interfaces/build/hardware/realsense:${workspaceFolder}/librealsense/build:${env:LD_LIBRARY_PATH}"
+                }
+            ],
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
